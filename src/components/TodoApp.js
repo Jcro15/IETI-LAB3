@@ -4,121 +4,72 @@ import './App.css';
 import {TodoList} from "./TodoList";
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
-import { InputLabel,Button, TextField } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { withStyles} from '@material-ui/core/styles';
+import { Fab } from '@material-ui/core';
+import {NewTask} from './NewTask'
+import { Redirect } from 'react-router-dom';
+import SearchIcon from '@material-ui/icons/Search';
 
 
 
-export class TodoApp extends Component {
+
+const useStyles =theme => ({
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+      },
+      fab2: {
+        position: 'fixed',
+        bottom: theme.spacing(10),
+        right: theme.spacing(2),
+      }
+})
+
+
+ class TodoApp extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {items: [], text: '', state:'', dueDate: moment()};
-        this.handleTextChange = this.handleTextChange.bind(this);
-        this.handleStateChange = this.handleStateChange.bind(this);
-        this.handleDateChange = this.handleDateChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {redirect:false};
+        this.handleRedirect=this.handleRedirect.bind(this);
         
     }
 
 
     render() {
-
+        const { classes } = this.props;
+        if(this.state.redirect){
+            return<Redirect to={'/newtask'} />
+        }
         return (
             <div className="App">
-
-               
-                <br/>
-                <form onSubmit={this.handleSubmit} className="todo-form">
-                    <h3>New TODO</h3>
-                    <InputLabel htmlFor="text" className="right-margin">
-                        Text:
-                    </InputLabel>
-
-                    <TextField
-                        id="text"
-                        onChange={this.handleTextChange}
-                        value={this.state.text}>
-                    </TextField>
-
-                    <br/>
-                    <br/>
-                    <InputLabel htmlFor="state" className="right-margin">
-                        State:
-                    </InputLabel>
-
-                    <TextField
-                        id="state"
-                        onChange={this.handleStateChange}
-                        value={this.state.state}>
-                    </TextField>
-                    <br/>
-                    <br/>
-                    <TextField
-                        id="due-date"
-                        label= "Due-Date"
-                        type="date"
-                        onChange={this.handleDateChange}
-                        defaultValue={this.state.dueDate.format('YYYY-MM-DD')}
-                        
-                    
-                    />
-
-                
-                
-                    <br/>
-                    <Button type="submit"
-                                variant="contained"
-                                color="primary"
-                                className="submit">
-                        Add #{this.state.items.length + 1}
-                    </Button>
-                </form>
+{                console.log(this.props.items)}                
                 <br/>
                 <br/>
-                <TodoList todoList={this.state.items}/>
+                <TodoList todoList={this.props.items}/>
+                <Fab color="primary" aria-label="add" className={classes.fab} onClick={this.handleRedirect}>
+                <AddIcon />
+                </Fab> 
+                <Fab color="primary" aria-label="add" className={classes.fab2} onClick={this.handleRedirect}>
+                <SearchIcon />
+                </Fab> 
+
             </div>
         );
     }
 
-    handleTextChange(e) {
+    
+    handleRedirect() {
         this.setState({
-            text: e.target.value
-        });
+            redirect: true
+      });
     }
-
-    handleStateChange(e) {
-        this.setState({
-            state: e.target.value
-        });
-    }
-
-    handleDateChange(e) {
-        this.setState({
-            dueDate: moment(e.target.value,'YYYY-MM-DD')
-        });
-    }
-
-    handleSubmit(e) {
-
-        e.preventDefault();
-
-        if (!this.state.text.length || !this.state.state.length || !this.state.dueDate)
-            return;
-
-        const newItem = {
-            text: this.state.text,
-            state: this.state.state,
-            dueDate: this.state.dueDate,
-            responsible: {name: localStorage.getItem("name"), email:localStorage.getItem("email")}
-
-        };
-        this.setState(prevState => ({
-            items: prevState.items.concat(newItem),
-            text: '',
-            state: '',
-            dueDate: moment()
-        }));
-    }
+    
+    
 
 }
+export default withStyles(useStyles, { withTheme: true })(TodoApp);
+
 

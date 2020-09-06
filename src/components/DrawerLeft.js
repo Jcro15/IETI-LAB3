@@ -18,6 +18,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import PersonIcon from '@material-ui/icons/Person';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import { Redirect } from 'react-router-dom';
+
+
 
 const drawerWidth = 240;
 
@@ -81,7 +85,7 @@ const useStyles =theme => ({
 class DrawerLeft extends React.Component{
     constructor(props) {
         super(props);
-        this.state={open : false}
+        this.state={open : false, redirect:false}
         this.handleDrawer=this.handleDrawer.bind(this)
     }
 
@@ -89,6 +93,9 @@ class DrawerLeft extends React.Component{
 
     render(){
         const { classes } = this.props;
+        if(this.state.redirect){
+          return<Redirect to={'/userprofile'} />
+      } 
         return (
             <div className={classes.root}>
             <CssBaseline />
@@ -141,6 +148,14 @@ class DrawerLeft extends React.Component{
                 
               </List>
               <Divider />
+
+              <List>
+              <ListItem button key={"Update"} onClick={()=>{this.setState({redirect:true})}}>
+                <ListItemIcon><SettingsApplicationsIcon/> </ListItemIcon>
+                <ListItemText primary={"Actualizar datos"} />
+              </ListItem>
+          </List>
+
             </Drawer>
             <main
         className={clsx(classes.content, {
