@@ -40,7 +40,7 @@ export class NewTask extends Component {
                 <br/>
                 <TextField
                     id="responsibleN"
-                    label="Responsible Name"
+                    label="Name"
                     name="responsibleName"
                     onChange={this.handleChange}
                     value={this.state.responsibleName}>
@@ -49,7 +49,7 @@ export class NewTask extends Component {
 
                 <TextField
                     id="responsibleE"
-                    label="Responsible Email"
+                    label="Email"
                     name="responsibleEmail"
                     onChange={this.handleChange}
                     value={this.state.responsibleEmail}>
